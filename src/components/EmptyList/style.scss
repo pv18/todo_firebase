@@ -1,0 +1,24 @@
+.empty-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  background-color: #fff;
+  border-radius: 0.25rem;
+
+  &__title {
+    font-size: 28px;
+    margin-bottom: 15px;
+    font-weight: 300;
+  }
+
+  &__icon {
+    width: 48px;
+    margin-top: 1rem;
+    color: #42BE2A;
+    font-size: 32px;
+  }
+}
+
