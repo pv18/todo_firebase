@@ -1,5 +1,5 @@
 [//]: # (![preview]&#40;https://github.com/pv18/list_of_countries/blob/master/public/img/preview.jpg&#41;)
-# Список флагов государств
+# Todo with FIREBASE
 
 API - restcountries.com
 
