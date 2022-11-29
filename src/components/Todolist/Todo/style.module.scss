@@ -7,7 +7,7 @@
     margin-bottom: 0;
   }
 
-  &-header {
+  .todoHeader {
     padding: 0.75rem 1.25rem;
     font-weight: 700;
     display: flex;
@@ -34,27 +34,19 @@
     }
   }
 
-  &-header-title {
-
-  }
-
-  &-header-icon {
+  .todoArrow {
     width: 15px;
     margin-top: 1px;
     margin-right: 10px;
     transition: all 0.3s ease;
   }
 
-  &-buttons {
+  .todoButtons {
     display: flex;
     column-gap: 5px;
   }
 
-  &-content-slide-down {
-
-  }
-
-  &-content {
+  .todoContent {
     padding: 0.75rem 1.25rem;
     color: #212529;
     border-left: 1px solid transparent;
@@ -62,35 +54,15 @@
     border-top: 1px solid transparent;
     overflow: hidden;
     transition: all 0.3s;
-
-    p {
-      margin-bottom: 4px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    span {
-      text-transform: uppercase;
-      margin-right: 5px;
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
   }
 
-  .todo-description {
-    margin-top: 8px;
-    font-style: italic;
-    text-indent: 40px;
-  }
-
-  &__active &-header-icon {
+  &__active .todoArrow {
     transform: rotate(180deg);
   }
 }
+
+
+
 
 
 

@@ -1,92 +1,92 @@
-import React, {FC, MouseEvent, useMemo, useState} from 'react';
+import React, {FC, MouseEvent, useEffect, useState} from 'react';
 import classNames from 'classnames';
 import {SlideDown} from 'react-slidedown';
 import 'react-slidedown/lib/slidedown.css';
 import IconTick from '../../../assets/svgs/tick.svg';
 import IconCross from '../../../assets/svgs/cross.svg';
 import IconArrowDown from '../../../assets/svgs/arrow_down.svg';
-import './style.scss';
-import dayjs, {Dayjs} from 'dayjs';
+import IconPencil from '../../../assets/svgs/pencil.svg';
+import dayjs from 'dayjs';
+import {TodoDate} from './TodoDate';
+import {TodoDescription} from './TodoDescription';
+import {TodoTitle} from './TodoTitle';
+import {deleteDoc, doc, updateDoc} from 'firebase/firestore';
+import {db} from '../../../firebase';
+import {TodoType} from '../../../types/shared';
+import {IconButton} from '../../IconButton';
+import s from './style.module.scss';
+import {verifyRunDateTodo} from '../../../utils/verifyRunDateTodo';
+
+dayjs.locale('ru')
 
 type Props = {
-    title: string
-    date: string
-    description?: string
-    completed: boolean
-    deleteTodo: () => void
-    changeStatusTodo: () => void
+    todo: TodoType
 }
 
-export const Todo: FC<Props> = props => {
-    const {
-        title,
-        date,
-        description = '',
-        completed,
-        deleteTodo,
-        changeStatusTodo,
-    } = props
-
+export const Todo: FC<Props> = ({todo}) => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const [isEditMode, setIsEditMode] = useState<boolean>(false)
+    const [isEditModeTitle, setIsEditModeTitle] = useState<boolean>(false)
+    const [isTimesUp, setIsTimesUp] = useState<boolean>(false);
 
-    const test = () => {
-        const year = +dayjs(date).format('YYYY')
-        const month = +dayjs(date).format('MM')
-        const day = +dayjs(date).format('DD')
-        const yearNow = dayjs().year()
-        const monthNow = dayjs().month()
-        const dayNow = dayjs().day()
+    useEffect(() => {
+        setIsTimesUp(verifyRunDateTodo(todo.date))
+    }, [todo])
 
-        if (yearNow > year) return false
-        if (yearNow === year && monthNow > month) return false
-        if (yearNow === year && monthNow === month && dayNow >= day) return false
-
-        return true
-    }
 
     const toggleAccordionHandler = () => {
-        if (!completed && !test()) {
+        if (!todo.completed && !isTimesUp) {
             setIsOpen(prevState => !prevState)
         }
     }
 
-    const onDeleteHandler = (e: MouseEvent<HTMLButtonElement>) => {
+    const onDeleteHandler = async (e: MouseEvent<HTMLButtonElement>, id: string) => {
         e.stopPropagation()
-        deleteTodo()
+        await deleteDoc(doc(db, 'todos', id));
     }
 
-    const onChangeStatusTodo = (e: MouseEvent<HTMLButtonElement>) => {
+    const onChangeStatusTodo = async (e: MouseEvent<HTMLButtonElement>, todo: TodoType) => {
         e.stopPropagation()
-        changeStatusTodo()
+        await updateDoc(doc(db, 'todos', todo.id), {completed: !todo.completed})
+        setIsOpen(false)
+    }
+
+    const setIsEditModeTitleHandler = (e: MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation()
+        if (!todo.completed && !isTimesUp && !isEditModeTitle) {
+            setIsEditModeTitle(true)
+        }
     }
 
     return (
-        <div className={classNames('todo', {
-            'todo__active': isOpen
-        })}>
-            <div className={classNames('todo-header',
-                {'todo-header__active': completed},
-                {'todo-header__error': test()})}
+        <div className={classNames(s.todo, {[s.todo__active]: isOpen})}>
+            <div className={classNames(s.todoHeader,
+                {[s.todoHeader__active]: todo.completed},
+                {[s.todoHeader__error]: isTimesUp})}
                  onClick={toggleAccordionHandler}>
-                <div>
-                    <img className={classNames('todo-header-icon')} src={IconArrowDown} alt="arrow down"/>
-                    <span className={'accordion-header-title'}>{title}</span>
+                <div style={{display: 'flex'}}>
+                    <img className={classNames(s.todoArrow)} src={IconArrowDown} alt="arrow down"/>
+                    <TodoTitle
+                        todo={todo}
+                        editMode={isEditModeTitle}
+                        closeEditMode={() => setIsEditModeTitle(false)}
+                    />
                 </div>
-                <div className={'todo-buttons'}>
-                    <button className={'button-action'}
-                            onClick={(e) => onChangeStatusTodo(e)}>
+                <div className={s.todoButtons}>
+                    <IconButton disabled={isEditModeTitle} onClick={(e) => setIsEditModeTitleHandler(e)}>
+                        <img src={IconPencil} alt="pencil"/>
+                    </IconButton>
+                    <IconButton onClick={(e) => onChangeStatusTodo(e, todo)}>
                         <img src={IconTick} alt="tick"/>
-                    </button>
-                    <button className={'button-action'} onClick={(e) => onDeleteHandler(e)}>
+                    </IconButton>
+                    <IconButton onClick={(e,) => onDeleteHandler(e, todo.id)}>
                         <img src={IconCross} alt="cross"/>
-                    </button>
+                    </IconButton>
                 </div>
             </div>
-            <SlideDown className={'todo-content-slide-down'}>
-                {isOpen && <div className={'todo-content'}>
-                    <p><span>дата завершения:</span> {dayjs(date).format('DD.MM.YY')}</p>
-                    <p className={'todo-description'}>{description}</p>
+            <SlideDown>
+                {isOpen && <div className={s.todoContent}>
+                    <TodoDate todo={todo}/>
+                    <TodoDescription todo={todo}/>
                 </div>}
             </SlideDown>
         </div>

@@ -1,0 +1,13 @@
+.wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-indent: 15px;
+  font-style: italic;
+  margin-bottom: 4px;
+
+  span {
+    text-transform: uppercase;
+    margin-right: 5px;
+  }
+}

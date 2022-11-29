@@ -1,0 +1,29 @@
+.button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #ffffff;
+  background-color: #0062cc;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #005cbf;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  transition: transform 0.2s linear, color .15s ease-in-out, background-color .15s ease-in-out;
+
+  &:hover {
+    background-color: #141212;
+    border-color: transparent;
+    color: #fff;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
