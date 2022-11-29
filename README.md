@@ -1,4 +1,4 @@
-[//]: # (![preview]&#40;https://github.com/pv18/list_of_countries/blob/master/public/img/preview.jpg&#41;)
+![preview](https://github.com/pv18/todo_firebase/blob/master/public/img/preview.jpg)
 # Todo with FIREBASE
 
 API - restcountries.com
