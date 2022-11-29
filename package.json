@@ -1,8 +1,8 @@
 {
-  "name": "todo_with_day-js",
+  "name": "todo_firebase",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://pv18.github.io/list_of_countries",
+  "homepage": "https://pv18.github.io/todo_firebase",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
