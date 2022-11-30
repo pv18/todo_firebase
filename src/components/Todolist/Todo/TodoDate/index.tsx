@@ -17,7 +17,7 @@ export const TodoDate: FC<Props> = ({todo}) => {
     const [isEditMode, setIsEditMode] = useState<boolean>(false)
 
     const changeDateTodo = async (todo: TodoType, newDate: string) => {
-        await updateDoc(doc(db, 'todos', todo.id), {description: newDate})
+        await updateDoc(doc(db, 'todos', todo.id), {date: newDate})
     }
 
     const onBlurDateHandler = (todo: TodoType) => {
